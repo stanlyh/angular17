@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,9 +6,15 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <h1>Hola celeste</h1>
+    <section ngClass="['w-full', ccsClass ]">
+
+      <ng-content />
+
+    </section>
   `
 })
 export class HeavyLoadersFastComponent {
+
+  @Input({ required: true }) cssClass!: string;
 
 }
