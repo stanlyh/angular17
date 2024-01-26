@@ -1,5 +1,6 @@
-import { Injectable, signal } from '@angular/core';
-import { User } from '@interfaces/req-response';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { User, UsersResponse } from '@interfaces/req-response';
 
 
 interface State {
@@ -12,13 +13,29 @@ interface State {
 })
 export class UsersService {
 
+  private http = inject( HttpClient );
+
   #state = signal<State>({
     loading: true,
     users: [],
   });
 
+  public users = computed( () => this.#state().users );
+  public loading = computed( () => this.#state().loading );
+
+
   constructor() {
-    console.log('Cargando data...')
+
+    this.http.get<UsersResponse>('https://reqres.in/api/users')
+      .subscribe( res => {
+
+        this.#state.set({
+          loading: false,
+          users: res.data,
+        })
+
+      });
+
    }
 }
 
